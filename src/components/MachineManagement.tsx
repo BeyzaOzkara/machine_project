@@ -50,7 +50,7 @@ export default function MachineManagement() {
       const { data: machinesData } = await machineQuery;
       setMachines(machinesData || []);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Veriler yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -78,19 +78,19 @@ export default function MachineManagement() {
       setShowModal(false);
       loadData();
     } catch (error) {
-      console.error('Error adding machine:', error);
+      console.error('Makine eklenirken hata oluştu:', error);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this machine?')) return;
+    if (!confirm('Bu makineyi silmek istediğinden emin misin?')) return;
 
     try {
       const { error } = await supabase.from('machines').delete().eq('id', id);
       if (error) throw error;
       loadData();
     } catch (error) {
-      console.error('Error deleting machine:', error);
+      console.error('Makine silinirken hata oluştu:', error);
     }
   };
 
@@ -119,14 +119,14 @@ export default function MachineManagement() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Settings className="w-6 h-6 text-gray-700" />
-          <h2 className="text-xl font-bold text-gray-900">Machine Management</h2>
+          <h2 className="text-xl font-bold text-gray-900">Makine Yönetimi</h2>
         </div>
         <button
           onClick={() => setShowModal(true)}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Machine</span>
+          <span>Makine Ekle</span>
         </button>
       </div>
 
@@ -135,20 +135,20 @@ export default function MachineManagement() {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Code
+                Kod
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Name
+                Ad
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Department
+                Bölüm
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Status
+                Durum
               </th>
               {profile?.role === 'admin' && (
                 <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase">
-                  Actions
+                  İşlemler
                 </th>
               )}
             </tr>
@@ -184,7 +184,7 @@ export default function MachineManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900">Add Machine</h3>
+              <h3 className="text-xl font-bold text-gray-900">Makine Ekle</h3>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -196,48 +196,48 @@ export default function MachineManagement() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Machine Code
+                  Makine Kodu
                 </label>
                 <input
                   type="text"
                   value={formData.machine_code}
                   onChange={(e) => setFormData({ ...formData, machine_code: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., M006"
+                  placeholder="örn. M006"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Machine Name
+                  Makine Adı
                 </label>
                 <input
                   type="text"
                   value={formData.machine_name}
                   onChange={(e) => setFormData({ ...formData, machine_name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., CNC Machine B"
+                  placeholder="örn. CNC Makinesi B"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Description
+                  Açıklama
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Brief description"
+                  placeholder="Kısa açıklama"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Department
+                  Bölüm
                 </label>
                 <select
                   value={formData.department_id}
@@ -245,7 +245,7 @@ export default function MachineManagement() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   required
                 >
-                  <option value="">Select Department</option>
+                  <option value="">Bölüm Seç</option>
                   {availableDepartments.map((dept) => (
                     <option key={dept.id} value={dept.id}>
                       {dept.name}
@@ -260,13 +260,13 @@ export default function MachineManagement() {
                   onClick={() => setShowModal(false)}
                   className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  İptal
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800"
                 >
-                  Add Machine
+                  Makine Ekle
                 </button>
               </div>
             </form>

@@ -27,14 +27,14 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
         onSuccess?.();
       } else {
         if (!fullName.trim()) {
-          throw new Error('Please enter your full name');
+          throw new Error('Lütfen ad soyadınızı girin');
         }
         const { error } = await signUp(email, password, fullName);
         if (error) throw error;
         onSuccess?.();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : 'Bir hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -51,9 +51,9 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
               <UserPlus className="w-8 h-8 text-white" />
             )}
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">Machine Monitoring System</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Makine İzleme Sistemi</h2>
           <p className="text-gray-600 mt-2">
-            {isLogin ? 'Sign in to access the dashboard' : 'Create your account'}
+            {isLogin ? 'Panele erişmek için giriş yap' : 'Hesabını oluştur'}
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
           {!isLogin && (
             <div>
               <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name
+                Ad Soyad
               </label>
               <input
                 id="fullName"
@@ -69,7 +69,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                placeholder="John Doe"
+                placeholder="Ali Veli"
                 required={!isLogin}
               />
             </div>
@@ -77,7 +77,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
 
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-              Email
+              E-posta
             </label>
             <input
               id="email"
@@ -85,14 +85,14 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-              placeholder="your@email.com"
+              placeholder="a@arslanaluminyum.com"
               required
             />
           </div>
 
           <div>
             <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-              Password
+              Şifre
             </label>
             <input
               id="password"
@@ -118,7 +118,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
             disabled={loading}
             className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+            {loading ? 'Lütfen bekle...' : isLogin ? 'Giriş Yap' : 'Hesap Oluştur'}
           </button>
         </form>
 
@@ -130,7 +130,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps = {}) {
             }}
             className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+            {isLogin ? "Hesabın yok mu? Kayıt ol" : 'Zaten bir hesabın var mı? Giriş yap'}
           </button>
         </div>
       </div>

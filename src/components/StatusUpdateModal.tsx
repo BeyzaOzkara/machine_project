@@ -47,7 +47,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
       if (error) throw error;
       setStatusTypes(data || []);
     } catch (error) {
-      console.error('Error loading status types:', error);
+      console.error('Durum türleri yüklenirken hata oluştu:', error);
     }
   };
 
@@ -55,12 +55,12 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
     e.preventDefault();
 
     if (!user || !profile) {
-      setError('You must be logged in to update machine status');
+      setError('Makine durumunu güncellemek için giriş yapmalısın');
       return;
     }
 
     if (selectedStatus === machine.current_status && !comment.trim()) {
-      setError('Please either change the status or add a comment');
+      setError('Lütfen ya durumu değiştir ya da bir yorum ekle');
       return;
     }
 
@@ -94,7 +94,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
       onUpdate();
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update machine status');
+      setError(err instanceof Error ? err.message : 'Makine durumu güncellenemedi');
     } finally {
       setSaving(false);
     }
@@ -104,7 +104,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900">Update Machine Status</h3>
+          <h3 className="text-xl font-bold text-gray-900">Makine Durumunu Güncelle</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -116,7 +116,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Machine
+              Makine
             </label>
             <div className="bg-gray-50 p-3 rounded-lg">
               <p className="font-medium text-gray-900">{machine.machine_code}</p>
@@ -126,7 +126,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Status
+              Durum
             </label>
             <div className="grid grid-cols-2 gap-2">
               {statusTypes.map((statusType) => {
@@ -151,7 +151,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
 
           <div>
             <label htmlFor="comment" className="block text-sm font-semibold text-gray-700 mb-2">
-              Comment (Optional)
+              Yorum (İsteğe Bağlı)
             </label>
             <textarea
               id="comment"
@@ -159,7 +159,7 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
               onChange={(e) => setComment(e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-              placeholder="Add any notes about this status change..."
+              placeholder="Bu durum değişikliğiyle ilgili not ekle..."
             />
           </div>
 
@@ -176,14 +176,14 @@ export default function StatusUpdateModal({ machine, onClose, onUpdate }: Status
               onClick={onClose}
               className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
-              Cancel
+              İptal
             </button>
             <button
               type="submit"
               disabled={saving}
               className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {saving ? 'Updating...' : 'Update Status'}
+              {saving ? 'Güncelleniyor...' : 'Durumu Güncelle'}
             </button>
           </div>
         </form>

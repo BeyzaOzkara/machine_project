@@ -72,8 +72,8 @@ export default function Dashboard() {
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900">Production Monitor</h1>
-                  <p className="text-xs text-gray-500">Real-time Machine Status</p>
+                  <h1 className="text-lg font-bold text-gray-900">Üretim Takip Ekranı</h1>
+                  <p className="text-xs text-gray-500">Gerçek Zamanlı Makine Durumu</p>
                 </div>
               </div>
 
@@ -86,7 +86,7 @@ export default function Dashboard() {
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
-                  Overview
+                  Genel Bakış
                 </button>
                 <button
                   onClick={() => setActiveTab('history')}
@@ -97,7 +97,7 @@ export default function Dashboard() {
                   }`}
                 >
                   <HistoryIcon className="w-4 h-4" />
-                  <span>History</span>
+                  <span>Geçmiş</span>
                 </button>
                 {(isAdmin || isTeamLeader) && (
                   <button
@@ -109,7 +109,7 @@ export default function Dashboard() {
                     }`}
                   >
                     <SettingsIcon className="w-4 h-4" />
-                    <span>Management</span>
+                    <span>Yönetim</span>
                   </button>
                 )}
               </nav>
@@ -132,20 +132,20 @@ export default function Dashboard() {
                     className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
-                    <span className="text-sm font-medium">Sign Out</span>
+                    <span className="text-sm font-medium">Çıkış Yap</span>
                   </button>
                 </>
               ) : (
                 <>
                   <div className="text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
-                    View-Only Mode
+                    Yalnızca Görüntüleme Modu
                   </div>
                   <button
                     onClick={() => setShowAuthModal(true)}
                     className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white hover:bg-gray-800 rounded-lg transition-colors"
                   >
                     <LogIn className="w-4 h-4" />
-                    <span className="text-sm font-medium">Sign In</span>
+                    <span className="text-sm font-medium">Giriş Yap</span>
                   </button>
                 </>
               )}

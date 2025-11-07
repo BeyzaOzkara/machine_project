@@ -31,7 +31,7 @@ export default function DepartmentManagement() {
       setDepartments(depts || []);
       setUsers(usersData || []);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Veriler yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -55,19 +55,19 @@ export default function DepartmentManagement() {
       setShowAddModal(false);
       loadData();
     } catch (error) {
-      console.error('Error adding department:', error);
+      console.error('Bölüm eklenirken hata oluştu:', error);
     }
   };
 
   const handleDeleteDepartment = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this department?')) return;
+    if (!confirm('Bu bölümü silmek istediğinden emin misin?')) return;
 
     try {
       const { error } = await supabase.from('departments').delete().eq('id', id);
       if (error) throw error;
       loadData();
     } catch (error) {
-      console.error('Error deleting department:', error);
+      console.error('Bölüm silinirken hata oluştu:', error);
     }
   };
 
@@ -84,14 +84,14 @@ export default function DepartmentManagement() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Building2 className="w-6 h-6 text-gray-700" />
-          <h2 className="text-xl font-bold text-gray-900">Departments</h2>
+          <h2 className="text-xl font-bold text-gray-900">Bölümler</h2>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Department</span>
+          <span>Bölüm Ekle</span>
         </button>
       </div>
 
@@ -120,7 +120,7 @@ export default function DepartmentManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900">Add Department</h3>
+              <h3 className="text-xl font-bold text-gray-900">Bölüm Ekle</h3>
               <button
                 onClick={() => setShowAddModal(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -132,28 +132,28 @@ export default function DepartmentManagement() {
             <form onSubmit={handleAddDepartment} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Department Name
+                  Bölüm Adı
                 </label>
                 <input
                   type="text"
                   value={newDeptName}
                   onChange={(e) => setNewDeptName(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., Production Floor A"
+                  placeholder="örn. Üretim Alanı A"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Description
+                  Açıklama
                 </label>
                 <textarea
                   value={newDeptDesc}
                   onChange={(e) => setNewDeptDesc(e.target.value)}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Brief description of this department"
+                  placeholder="Bu bölümle ilgili kısa bir açıklama"
                 />
               </div>
 
@@ -163,13 +163,13 @@ export default function DepartmentManagement() {
                   onClick={() => setShowAddModal(false)}
                   className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  İptal
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800"
                 >
-                  Add Department
+                  Bölüm Ekle
                 </button>
               </div>
             </form>

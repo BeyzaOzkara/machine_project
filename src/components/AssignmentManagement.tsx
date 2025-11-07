@@ -68,7 +68,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
         setAssignments(assigns || []);
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Veriler yüklenirken hata oluştu:', error);
     }
   };
 
@@ -97,7 +97,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
       setShowModal(false);
       loadData();
     } catch (error) {
-      console.error('Error assigning:', error);
+      console.error('Atama yapılırken hata oluştu:', error);
     }
   };
 
@@ -108,7 +108,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
       if (error) throw error;
       loadData();
     } catch (error) {
-      console.error('Error unassigning:', error);
+      console.error('Atama kaldırılırken hata oluştu:', error);
     }
   };
 
@@ -130,7 +130,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
         <div className="flex items-center space-x-3">
           <UserCheck className="w-6 h-6 text-gray-700" />
           <h2 className="text-xl font-bold text-gray-900">
-            {type === 'department' ? 'Department Leaders' : 'Machine Operators'}
+            {type === 'department' ? 'Bölüm Sorumluları' : 'Makine Operatörleri'}
           </h2>
         </div>
         <button
@@ -138,7 +138,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
           className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Assign {type === 'department' ? 'Leader' : 'Operator'}</span>
+          <span>{type === 'department' ? 'Bölüm Sorumlusu' : 'Operatör'} Ata</span>
         </button>
       </div>
 
@@ -147,13 +147,13 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                {type === 'department' ? 'Department' : 'Machine'}
+                {type === 'department' ? 'Bölüm' : 'Makine'}
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                {type === 'department' ? 'Team Leader' : 'Operator'}
+                {type === 'department' ? 'Bölüm Sorumlusu' : 'Operatör'}
               </th>
               <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase">
-                Actions
+                İşlemler
               </th>
             </tr>
           </thead>
@@ -180,7 +180,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
 
         {assignments.length === 0 && (
           <div className="text-center py-8 text-gray-500">
-            No assignments yet
+            Henüz bir atama yok
           </div>
         )}
       </div>
@@ -190,7 +190,7 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-bold text-gray-900">
-                Assign {type === 'department' ? 'Team Leader' : 'Operator'}
+                {type === 'department' ? 'Bölüm Sorumlusu' : 'Operatör'} Ata
               </h3>
               <button
                 onClick={() => setShowModal(false)}
@@ -203,14 +203,14 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Select {type === 'department' ? 'Department' : 'Machine'}
+                  {type === 'department' ? 'Bölüm' : 'Makine'} Seç
                 </label>
                 <select
                   value={selectedTarget}
                   onChange={(e) => setSelectedTarget(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 >
-                  <option value="">Choose...</option>
+                  <option value="">Seç...</option>
                   {type === 'department'
                     ? departments.map((dept) => (
                         <option key={dept.id} value={dept.id}>
@@ -227,14 +227,14 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Select {type === 'department' ? 'Team Leader' : 'Operator'}
+                  {type === 'department' ? 'Bölüm Sorumlusu' : 'Operatör'} Seç 
                 </label>
                 <select
                   value={selectedUser}
                   onChange={(e) => setSelectedUser(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 >
-                  <option value="">Choose...</option>
+                  <option value="">Seç...</option>
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.full_name}
@@ -248,14 +248,14 @@ export default function AssignmentManagement({ type }: AssignmentManagementProps
                   onClick={() => setShowModal(false)}
                   className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  İptal
                 </button>
                 <button
                   onClick={handleAssign}
                   disabled={!selectedTarget || !selectedUser}
                   className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Assign
+                  Ata
                 </button>
               </div>
             </div>

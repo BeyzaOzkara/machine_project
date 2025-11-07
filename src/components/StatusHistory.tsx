@@ -68,12 +68,12 @@ export default function StatusHistory({ machineId, machineName }: StatusHistoryP
 
       const enrichedHistory = historyData?.map(h => ({
         ...h,
-        user_name: userMap.get(h.changed_by) || 'Unknown User',
+        user_name: userMap.get(h.changed_by) || 'Bilinmeyen Kullanıcı',
       })) || [];
 
       setHistory(enrichedHistory);
     } catch (error) {
-      console.error('Error loading history:', error);
+      console.error('Geçmiş yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -98,22 +98,22 @@ export default function StatusHistory({ machineId, machineName }: StatusHistoryP
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <div className="flex items-center space-x-3 mb-6">
         <History className="w-6 h-6 text-gray-700" />
-        <h3 className="text-xl font-bold text-gray-900">Status History</h3>
+        <h3 className="text-xl font-bold text-gray-900">Durum Geçmişi</h3>
       </div>
 
       <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-        <p className="text-sm text-gray-600">Machine: <span className="font-semibold text-gray-900">{machineName}</span></p>
+        <p className="text-sm text-gray-600">Makine: <span className="font-semibold text-gray-900">{machineName}</span></p>
       </div>
 
       {loading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-3 text-gray-600 text-sm">Loading history...</p>
+          <p className="mt-3 text-gray-600 text-sm">Geçmiş yükleniyor...</p>
         </div>
       ) : history.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <History className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>No status changes recorded yet</p>
+          <p>Henüz herhangi bir durum değişikliği kaydedilmedi</p>
         </div>
       ) : (
         <div className="space-y-4">

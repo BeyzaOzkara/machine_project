@@ -100,14 +100,14 @@ export default function MachineCard({ machine, onClick, canUpdate }: MachineCard
       <div className="mt-3 pt-3 border-t border-gray-200 flex items-center text-xs text-gray-500">
         <Clock className="w-3 h-3 mr-1" />
         <span>
-          Updated {lastUpdate.toLocaleDateString()} at {lastUpdate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          Son güncelleme {lastUpdate.toLocaleDateString()} - {lastUpdate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>
 
       {machine.current_status === 'Fault' && (
         <div className="mt-2 flex items-center text-xs text-red-600">
           <AlertCircle className="w-3 h-3 mr-1" />
-          <span>Attention Required</span>
+          <span>Dikkat Gerekiyor</span>
         </div>
       )}
     </div>

@@ -33,7 +33,7 @@ export default function UserManagement() {
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
-      console.error('Error loading users:', error);
+      console.error('Kullanıcılar yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function UserManagement() {
       });
 
       if (authError) throw authError;
-      if (!authData.user) throw new Error('No user returned from signup');
+      if (!authData.user) throw new Error('Kayıt işleminden kullanıcı dönmedi');
 
       const { error: profileError } = await supabase
         .from('profiles')
@@ -73,7 +73,7 @@ export default function UserManagement() {
       setShowAddModal(false);
       loadUsers();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create user');
+      setError(err instanceof Error ? err.message : 'Kullanıcı oluşturulamadı');
     } finally {
       setSubmitting(false);
     }
@@ -89,7 +89,7 @@ export default function UserManagement() {
       if (error) throw error;
       loadUsers();
     } catch (error) {
-      console.error('Error updating role:', error);
+      console.error('Rol güncellenirken hata oluştu:', error);
     }
   };
 
@@ -117,14 +117,14 @@ export default function UserManagement() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Users className="w-6 h-6 text-gray-700" />
-          <h2 className="text-xl font-bold text-gray-900">User Management</h2>
+          <h2 className="text-xl font-bold text-gray-900">Kullanıcı Yönetimi</h2>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Add User</span>
+          <span>Kullanıcı Ekle</span>
         </button>
       </div>
 
@@ -133,13 +133,13 @@ export default function UserManagement() {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Name
+                Ad
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Email
+                E-posta
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                Role
+                Rol
               </th>
             </tr>
           </thead>
@@ -156,9 +156,9 @@ export default function UserManagement() {
                     onChange={(e) => handleRoleChange(user.id, e.target.value as Profile['role'])}
                     className={`px-3 py-1 rounded-full text-xs font-semibold border ${getRoleBadgeColor(user.role)}`}
                   >
-                    <option value="operator">Operator</option>
-                    <option value="team_leader">Team Leader</option>
-                    <option value="admin">Admin</option>
+                    <option value="operator">Operatör</option>
+                    <option value="team_leader">Bölüm Sorumlusu</option>
+                    <option value="admin">Yönetici</option>
                   </select>
                 </td>
               </tr>
@@ -171,7 +171,7 @@ export default function UserManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900">Add New User</h3>
+              <h3 className="text-xl font-bold text-gray-900">Yeni Kullanıcı Ekle</h3>
               <button
                 onClick={() => {
                   setShowAddModal(false);
@@ -186,35 +186,35 @@ export default function UserManagement() {
             <form onSubmit={handleAddUser} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Full Name
+                  Ad Soyad
                 </label>
                 <input
                   type="text"
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="John Doe"
+                  placeholder="Ali Veli"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email
+                  E-posta
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="john@example.com"
+                  placeholder="a@arslanaluminyum.com"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Password
+                  Şifre
                 </label>
                 <input
                   type="password"
@@ -229,16 +229,16 @@ export default function UserManagement() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Role
+                  Rol
                 </label>
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value as Profile['role'] })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 >
-                  <option value="operator">Operator</option>
-                  <option value="team_leader">Team Leader</option>
-                  <option value="admin">Admin</option>
+                  <option value="operator">Operatör</option>
+                  <option value="team_leader">Bölüm Sorumlusu</option>
+                  <option value="admin">Yönetici</option>
                 </select>
               </div>
 
@@ -258,14 +258,14 @@ export default function UserManagement() {
                   }}
                   className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  İptal
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
                   className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? 'Creating...' : 'Create User'}
+                  {submitting ? 'Oluşturuluyor...' : 'Kullanıcı Oluştur'}
                 </button>
               </div>
             </form>

@@ -31,7 +31,7 @@ export default function HistoryPage() {
       setLoading(true);
       await Promise.all([loadHistory(), loadMachines(), loadDepartments()]);
     } catch (error) {
-      console.error('Error loading history:', error);
+      console.error('Geçmiş yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export default function HistoryPage() {
       if (error) throw error;
       setMachines(data || []);
     } catch (error) {
-      console.error('Error loading machines:', error);
+      console.error('Makineler yüklenirken hata oluştu:', error);
     }
   };
 
@@ -61,7 +61,7 @@ export default function HistoryPage() {
       if (error) throw error;
       setDepartments(data || []);
     } catch (error) {
-      console.error('Error loading departments:', error);
+      console.error('Bölümler yüklenirken hata oluştu:', error);
     }
   };
 
@@ -127,12 +127,12 @@ export default function HistoryPage() {
       const enrichedHistory = historyData?.map(h => ({
         ...h,
         machine: machineMap.get(h.machine_id),
-        user_name: userMap.get(h.changed_by) || 'Unknown User',
+        user_name: userMap.get(h.changed_by) || 'Bilinmeyen Kullanıcı',
       })) || [];
 
       setHistory(enrichedHistory);
     } catch (error) {
-      console.error('Error loading history:', error);
+      console.error('Geçmiş yüklenirken hata oluştu:', error);
     }
   };
 
@@ -170,7 +170,7 @@ export default function HistoryPage() {
     return (
       <div className="text-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading history...</p>
+        <p className="mt-4 text-gray-600">Geçmiş yükleniyor...</p>
       </div>
     );
   }
@@ -180,26 +180,26 @@ export default function HistoryPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <History className="w-8 h-8 text-gray-700" />
-          <h2 className="text-2xl font-bold text-gray-900">Status Change History</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Durum Değişikliği Geçmişi</h2>
         </div>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <div className="flex items-center space-x-2 mb-3">
           <Filter className="w-5 h-5 text-gray-700" />
-          <h3 className="font-semibold text-gray-900">Filters</h3>
+          <h3 className="font-semibold text-gray-900">Filtreler</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Department
+              Bölüm
             </label>
             <select
               value={departmentFilter}
               onChange={(e) => setDepartmentFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
             >
-              <option value="All">All Departments</option>
+              <option value="All">Tüm Bölümler</option>
               {departments.map((dept) => (
                 <option key={dept.id} value={dept.id}>
                   {dept.name}
@@ -209,14 +209,14 @@ export default function HistoryPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Machine
+              Makine
             </label>
             <select
               value={machineFilter}
               onChange={(e) => setMachineFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
             >
-              <option value="All">All Machines</option>
+              <option value="All">Tüm Makineler</option>
               {machines.map((machine) => (
                 <option key={machine.id} value={machine.id}>
                   {machine.machine_code} - {machine.machine_name}
@@ -230,7 +230,7 @@ export default function HistoryPage() {
       {filteredHistory.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
           <History className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-          <p className="text-gray-600">No history records found</p>
+          <p className="text-gray-600">Geçmiş kaydı bulunamadı</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -245,7 +245,7 @@ export default function HistoryPage() {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h3 className="text-lg font-bold text-gray-900">
-                        {entry.machine?.machine_code || 'Unknown Machine'}
+                        {entry.machine?.machine_code || 'Bilinmeyen Makine'}
                       </h3>
                       <span className="text-sm text-gray-500">
                         {entry.machine?.machine_name}
@@ -254,7 +254,7 @@ export default function HistoryPage() {
                     <div className="flex items-center space-x-2 text-sm text-gray-600">
                       <Calendar className="w-4 h-4" />
                       <span>
-                        {date} at {time}
+                        {date} - {time}
                       </span>
                     </div>
                   </div>

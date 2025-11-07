@@ -44,7 +44,7 @@ export default function StatusTypeManagement() {
       if (error) throw error;
       setStatusTypes(data || []);
     } catch (error) {
-      console.error('Error loading status types:', error);
+      console.error('Durum türleri yüklenirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export default function StatusTypeManagement() {
       setEditingStatus(null);
       loadStatusTypes();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save status type');
+      setError(err instanceof Error ? err.message : 'Durum türü kaydedilemedi');
     }
   };
 
@@ -96,24 +96,24 @@ export default function StatusTypeManagement() {
       if (error) throw error;
       loadStatusTypes();
     } catch (error) {
-      console.error('Error toggling status:', error);
+      console.error('Durum değiştirilirken hata oluştu:', error);
     }
   };
 
   const handleDelete = async (status: StatusType) => {
     if (status.is_default) {
-      alert('Cannot delete default status types');
+      alert('Varsayılan durum türleri silinemez');
       return;
     }
 
-    if (!confirm(`Are you sure you want to delete "${status.name}"?`)) return;
+    if (!confirm(`Silmek istediğinden emin misin? "${status.name}"?`)) return;
 
     try {
       const { error } = await supabase.from('status_types').delete().eq('id', status.id);
       if (error) throw error;
       loadStatusTypes();
     } catch (error) {
-      console.error('Error deleting status type:', error);
+      console.error('Durum türü silinirken hata oluştu:', error);
     }
   };
 
@@ -151,14 +151,14 @@ export default function StatusTypeManagement() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Tag className="w-6 h-6 text-gray-700" />
-          <h2 className="text-xl font-bold text-gray-900">Status Types</h2>
+          <h2 className="text-xl font-bold text-gray-900">Durum Türleri</h2>
         </div>
         <button
           onClick={() => setShowModal(true)}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Status Type</span>
+          <span>Durum Türü Ekle</span>
         </button>
       </div>
 
@@ -178,10 +178,10 @@ export default function StatusTypeManagement() {
                     {status.name}
                   </div>
                   {status.is_default && (
-                    <span className="ml-2 text-xs text-gray-500">(Default)</span>
+                    <span className="ml-2 text-xs text-gray-500">(Varsayılan)</span>
                   )}
                   {!status.is_active && (
-                    <span className="ml-2 text-xs text-red-600">(Inactive)</span>
+                    <span className="ml-2 text-xs text-red-600">(Pasif)</span>
                   )}
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default function StatusTypeManagement() {
                       : 'bg-green-100 text-green-800 hover:bg-green-200'
                   }`}
                 >
-                  {status.is_active ? 'Deactivate' : 'Activate'}
+                  {status.is_active ? 'Pasifleştir' : 'Aktifleştir'}
                 </button>
                 <button
                   onClick={() => openEditModal(status)}
@@ -232,21 +232,21 @@ export default function StatusTypeManagement() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Status Name
+                  Durum Adı
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="e.g., Calibration, Cleaning"
+                  placeholder="örn. Kalibrasyon, Temizlik"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Color
+                  Renk
                 </label>
                 <div className="grid grid-cols-4 gap-2">
                   {colorOptions.map((color) => (
@@ -279,13 +279,13 @@ export default function StatusTypeManagement() {
                   onClick={closeModal}
                   className="flex-1 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
-                  Cancel
+                  İptal
                 </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800"
                 >
-                  {editingStatus ? 'Update' : 'Add'} Status
+                  {editingStatus ? 'Güncelle' : 'Ekle'} Durum
                 </button>
               </div>
             </form>
