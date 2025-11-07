@@ -104,10 +104,10 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
 
   const statusCounts = {
     All: machines.length,
-    Running: machines.filter(m => m.current_status === 'Running').length,
-    Idle: machines.filter(m => m.current_status === 'Idle').length,
-    Fault: machines.filter(m => m.current_status === 'Fault').length,
-    'Under Maintenance': machines.filter(m => m.current_status === 'Under Maintenance').length,
+    Çalışıyor: machines.filter(m => m.current_status === 'Çalışıyor').length,
+    Boşta: machines.filter(m => m.current_status === 'Boşta').length,
+    Arıza: machines.filter(m => m.current_status === 'Arıza').length,
+    Bakımda: machines.filter(m => m.current_status === 'Bakımda').length,
   };
 
   const getDepartmentName = (deptId: string | null) => {

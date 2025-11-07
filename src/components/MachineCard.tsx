@@ -61,10 +61,10 @@ const colorMap: Record<string, { color: string; textColor: string; bgColor: stri
 };
 
 const statusColorMap: Record<string, string> = {
-  Running: 'green',
-  Idle: 'yellow',
-  Fault: 'red',
-  'Under Maintenance': 'blue',
+  Çalışıyor: 'green',
+  Boşta: 'yellow',
+  Arıza: 'red',
+  Bakımda: 'blue',
 };
 
 export default function MachineCard({ machine, onClick, canUpdate }: MachineCardProps) {
