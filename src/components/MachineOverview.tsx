@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 type Machine = Database['public']['Tables']['machines']['Row'];
 type Department = Database['public']['Tables']['departments']['Row'];
+type StatusType = Database['public']['Tables']['status_types']['Row'];
 
 interface MachineOverviewProps {
   onMachineSelect: (machine: Machine) => void;
@@ -15,6 +16,7 @@ interface MachineOverviewProps {
 export default function MachineOverview({ onMachineSelect }: MachineOverviewProps) {
   const [machines, setMachines] = useState<Machine[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [statusTypes, setStatusTypes] = useState<StatusType[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [departmentFilter, setDepartmentFilter] = useState<string>('All');
@@ -49,7 +51,7 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
   }, [profile?.role]);
 
   const loadData = async () => {
-    await Promise.all([loadMachines(), loadDepartments()]);
+    await Promise.all([loadMachines(), loadDepartments(), loadStatusTypes()]);
   };
 
   const loadDepartments = async () => {
@@ -62,7 +64,22 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
       if (error) throw error;
       setDepartments(data || []);
     } catch (error) {
-      console.error('Bölümler yüklenirken hata oluştu:', error);
+      console.error('Error loading departments:', error);
+    }
+  };
+
+  const loadStatusTypes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('status_types')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+
+      if (error) throw error;
+      setStatusTypes(data || []);
+    } catch (error) {
+      console.error('Error loading status types:', error);
     }
   };
 
@@ -77,7 +94,7 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
       if (error) throw error;
       setMachines(data || []);
     } catch (error) {
-      console.error('Makineler yüklenirken hata oluştu:', error);
+      console.error('Error loading machines:', error);
     } finally {
       setLoading(false);
     }
@@ -102,17 +119,36 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
     );
   }
 
-  const statusCounts = {
+  const statusCounts: Record<string, number> = {
     All: machines.length,
-    Çalışıyor: machines.filter(m => m.current_status === 'Çalışıyor').length,
-    Boşta: machines.filter(m => m.current_status === 'Boşta').length,
-    Arıza: machines.filter(m => m.current_status === 'Arıza').length,
-    Bakımda: machines.filter(m => m.current_status === 'Bakımda').length,
   };
+
+  statusTypes.forEach(statusType => {
+    statusCounts[statusType.name] = machines.filter(m => m.current_status === statusType.name).length;
+  });
 
   const getDepartmentName = (deptId: string | null) => {
     if (!deptId) return 'Unassigned';
     return departments.find(d => d.id === deptId)?.name || 'Unknown';
+  };
+
+  const getStatusColor = (statusName: string) => {
+    const statusType = statusTypes.find(st => st.name === statusName);
+    console.log('Status Type for', statusName, ':', statusType);
+    if (!statusType) return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300' };
+
+    const colorMap: Record<string, { bg: string; text: string; border: string }> = {
+      green: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
+      blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+      yellow: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' },
+      red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
+      purple: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
+      orange: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
+      pink: { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200' },
+      gray: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
+    };
+
+    return colorMap[statusType.color] || colorMap.gray;
   };
 
   return (
@@ -173,19 +209,25 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
       )}
 
       <div className="flex flex-wrap gap-2">
-        {Object.entries(statusCounts).map(([status, count]) => (
-          <button
-            key={status}
-            onClick={() => setStatusFilter(status)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              statusFilter === status
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            {status} ({count})
-          </button>
-        ))}
+        {Object.entries(statusCounts).map(([status, count]) => {
+          const colors = status === 'All'
+            ? { bg: 'bg-white', text: 'text-gray-700', border: 'border-gray-300' }
+            : getStatusColor(status);
+
+          return (
+            <button
+              key={status}
+              onClick={() => setStatusFilter(status)}
+              className={`px-4 py-2 rounded-lg font-medium transition-all border ${
+                statusFilter === status
+                  ? 'bg-gray-900 text-white border-gray-900'
+                  : `${colors.bg} ${colors.text} ${colors.border} hover:opacity-80`
+              }`}
+            >
+              {status} ({count})
+            </button>
+          );
+        })}
       </div>
 
       {loading && machines.length === 0 ? (
@@ -199,14 +241,18 @@ export default function MachineOverview({ onMachineSelect }: MachineOverviewProp
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredMachines.map((machine) => (
-            <MachineCard
-              key={machine.id}
-              machine={machine}
-              onClick={() => onMachineSelect(machine)}
-              canUpdate={canUpdate}
-            />
-          ))}
+          {filteredMachines.map((machine) => {
+            const statusType = statusTypes.find(st => st.name === machine.current_status);
+            return (
+              <MachineCard
+                key={machine.id}
+                machine={machine}
+                onClick={() => onMachineSelect(machine)}
+                canUpdate={canUpdate}
+                statusColor={statusType?.color || 'gray'}
+              />
+            );
+          })}
         </div>
       )}
     </div>

@@ -7,6 +7,8 @@ interface MachineCardProps {
   machine: Machine;
   onClick: () => void;
   canUpdate: boolean;
+  maxLines?: number; // NEW
+  statusColor: string; // NEW
 }
 
 const colorMap: Record<string, { color: string; textColor: string; bgColor: string; borderColor: string }> = {
@@ -60,17 +62,25 @@ const colorMap: Record<string, { color: string; textColor: string; bgColor: stri
   },
 };
 
-const statusColorMap: Record<string, string> = {
-  Çalışıyor: 'green',
-  Boşta: 'yellow',
-  Arıza: 'red',
-  Bakımda: 'blue',
-};
+// const statusColorMap: Record<string, string> = {
+//   Çalışıyor: 'green',
+//   Boşta: 'yellow',
+//   Arıza: 'red',
+//   Bakımda: 'blue',
+// };
 
-export default function MachineCard({ machine, onClick, canUpdate }: MachineCardProps) {
-  const colorKey = statusColorMap[machine.current_status] || 'gray';
-  const config = colorMap[colorKey];
+export default function MachineCard({ machine, onClick, canUpdate, maxLines=2, statusColor }: MachineCardProps) {
+  // const colorKey = statusColorMap[machine.current_status] || 'gray';
+  // const config = colorMap[colorKey];
+  const config = colorMap[statusColor] || colorMap.gray;
   const lastUpdate = new Date(machine.last_updated_at);
+
+  const clampStyle: React.CSSProperties = { // NEW
+    display: '-webkit-box',
+    WebkitLineClamp: maxLines,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  };
 
   return (
     <div
@@ -88,7 +98,10 @@ export default function MachineCard({ machine, onClick, canUpdate }: MachineCard
       </div>
 
       {machine.description && (
-        <p className="text-xs text-gray-500 mb-3 line-clamp-2">{machine.description}</p>
+        // <p className="text-xs text-gray-500 mb-3 line-clamp-2">{machine.description}</p>
+      <p className="text-xs text-gray-500 mb-3" style={clampStyle}>
+          {machine.description}
+        </p>
       )}
 
       <div className="flex items-center justify-between">
@@ -104,7 +117,7 @@ export default function MachineCard({ machine, onClick, canUpdate }: MachineCard
         </span>
       </div>
 
-      {machine.current_status === 'Fault' && (
+      {machine.current_status === 'Arıza' && (
         <div className="mt-2 flex items-center text-xs text-red-600">
           <AlertCircle className="w-3 h-3 mr-1" />
           <span>Dikkat Gerekiyor</span>
